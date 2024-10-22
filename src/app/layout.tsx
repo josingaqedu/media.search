@@ -18,6 +18,9 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.svg" />
+      </head>
       <body>
         <Providers>
           <Header />
