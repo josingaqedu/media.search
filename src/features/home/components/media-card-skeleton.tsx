@@ -1,6 +1,6 @@
 import { Card, CardBody, CardFooter, Skeleton } from "@nextui-org/react";
 
-export const MovieCardSkeleton = () => {
+export const MediaCardSkeleton = () => {
   return (
     <Card shadow="sm">
       <CardBody className="p-0">

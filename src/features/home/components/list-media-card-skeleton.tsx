@@ -1,10 +1,10 @@
-import { MovieCardSkeleton } from "@/features/home/components/movie-card-skeleton";
+import { MediaCardSkeleton } from "@/features/home/components/media-card-skeleton";
 
-export const ListMoviesCardSkeleton = () => {
+export const ListMediaCardSkeleton = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
       {Array.from({ length: 20 }).map((_, index) => (
-        <MovieCardSkeleton key={index} />
+        <MediaCardSkeleton key={index} />
       ))}
     </div>
   );

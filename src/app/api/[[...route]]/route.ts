@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 
-import { movies } from "@/features/home/server/route";
+import { discover } from "@/features/home/server/route";
 
 export const runtime = "edge";
 
 const app = new Hono().basePath("/api");
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const routes = app.route("/movies", movies);
+const routes = app.route("/discover", discover);
 
 export type AppType = typeof routes;
 

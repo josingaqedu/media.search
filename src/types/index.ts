@@ -15,7 +15,7 @@ export interface Movie {
   vote_count: number;
 }
 
-export interface TvShow {
+export interface Tv {
   adult: boolean;
   backdrop_path: null | string;
   genre_ids: number[];
