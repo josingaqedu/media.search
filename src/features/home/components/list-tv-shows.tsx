@@ -2,7 +2,7 @@
 
 import { useDiscoverTv } from "@/features/home/api/use-discover-tv";
 
-import { ListMediaCardSkeleton } from "@/features/home/components/list-media-card-skeleton";
+import { ListMediaCardSkeleton } from "@/components/list-media-card-skeleton";
 import { TvShowCard } from "@/features/home/components/tv-show-card";
 
 export const ListTvShows = () => {

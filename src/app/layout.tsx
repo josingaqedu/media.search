@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import { Providers } from "@/providers";
 
 import { Header } from "@/layouts/header";
+import { Footer } from "@/layouts/footer";
 
 import "@/styles/globals.css";
+import "@fontsource-variable/jost";
 
 export const metadata: Metadata = {
   title: "MEDIA SEARCH",
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
         <Providers>
           <Header />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

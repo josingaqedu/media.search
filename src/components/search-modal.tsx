@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
   Button,
   useDisclosure,
   Input,
@@ -15,8 +15,33 @@ import {
 import { SearchIcon } from "lucide-react";
 
 export const SearchModal = () => {
-  const [query, setQuery] = useState<string>("");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q");
+
+  const [search, setSearch] = useState<string>(query || "");
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    onClose();
+
+    const query = search
+      .trim()
+      .replace(/\s/g, "+")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    if (!query) {
+      setSearch("");
+      return null;
+    }
+
+    router.push(`/search?q=${query}`);
+  };
 
   return (
     <>
@@ -24,60 +49,31 @@ export const SearchModal = () => {
         <SearchIcon size={24} />
       </Button>
       <Modal
-        size="lg"
+        size="4xl"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
-        backdrop="blur"
-        placement="center"
+        backdrop="opaque"
+        placement="top"
         scrollBehavior="inside"
       >
-        <ModalContent className="py-4">
-          <>
-            <ModalHeader className="flex flex-col gap-2">
-              <p>Search</p>
+        <ModalContent className="py-2">
+          <ModalHeader>
+            <form className="w-full" onSubmit={handleSearch}>
               <Input
                 autoFocus={true}
                 startContent={
                   <SearchIcon size={24} className="text-default-400" />
                 }
-                placeholder="Search anything..."
+                placeholder="Busca una película o serie"
                 color="primary"
                 variant="underlined"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
-            </ModalHeader>
-            <ModalBody>
-              <div className="flex flex-col gap-2">
-                {/* {data.map((result) => (
-                  <div
-                    key={result.id}
-                    className="flex items-center gap-4 p-2 cursor-pointer hover:bg-primary/10 hover:rounded-lg"
-                    onClick={() => handleNavigation(result)}
-                  >
-                    <Image
-                      src={`${API_IMG}/original${result.poster_path}`}
-                      alt={result.title ?? result.name}
-                      className="rounded-lg"
-                      width={50}
-                    />
-                    <div>
-                      <p className="text-small">
-                        {result.title ?? result.name}
-                      </p>
-                      <p className="text-small uppercase">
-                        {result.media_type} -{" "}
-                        {result.release_date?.split("-")[0] ??
-                          result.first_air_date?.split("-")[0]}
-                      </p>
-                    </div>
-                  </div>
-                ))} */}
-              </div>
-            </ModalBody>
-          </>
+            </form>
+          </ModalHeader>
         </ModalContent>
       </Modal>
     </>

@@ -1,4 +1,4 @@
-import { MediaCardSkeleton } from "@/features/home/components/media-card-skeleton";
+import { MediaCardSkeleton } from "@/components/media-card-skeleton";
 
 export const ListMediaCardSkeleton = () => {
   return (

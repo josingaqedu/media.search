@@ -2,7 +2,7 @@
 
 import { useDiscoverMovie } from "@/features/home/api/use-discover-movie";
 
-import { ListMediaCardSkeleton } from "@/features/home/components/list-media-card-skeleton";
+import { ListMediaCardSkeleton } from "@/components/list-media-card-skeleton";
 import { MovieCard } from "@/features/home/components/movie-card";
 
 export const ListMovies = () => {

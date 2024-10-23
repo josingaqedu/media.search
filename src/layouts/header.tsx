@@ -24,18 +24,15 @@ export const Header = () => {
 
   const menuItems = [
     {
-      title: "MEDIA SEARCH | HOME",
-      name: "HOME",
+      name: "INICIO",
       href: "/",
     },
     {
-      title: "MEDIA SEARCH | MOVIES",
-      name: "MOVIES",
+      name: "PELÍCULAS",
       href: "/movies",
     },
     {
-      title: "MEDIA SEARCH | TV SHOWS",
-      name: "TV SHOWS",
+      name: "SERIES",
       href: "/tv-shows",
     },
   ];
