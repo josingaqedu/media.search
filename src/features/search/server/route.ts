@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { searchSchema } from "@/features/search/zod-schemas";
 
-import { ResultSearch, Movie, Tv } from "@/types";
+import { ResultSearch } from "@/types";
 
 const { API_URL, TMDB_TOKEN } = process.env;
 
@@ -21,37 +21,21 @@ export const search = new Hono()
 
     const response = await fetch(URL, OPTIONS);
 
-    const data = await response.json();
+    const { results } = await response.json();
 
-    const movies: ResultSearch[] = data.results;
+    const data: ResultSearch[] = results;
 
-    const filteredMovies = movies.filter(
+    const filteredData = data.filter(
       (item) => item.media_type === "movie" || item.media_type === "tv"
     );
-    
-    const resultMovies = filteredMovies.filter((item) => item.poster_path);
 
-    return c.json(resultMovies);
+    const searchData = filteredData.filter((item) => item.poster_path);
+
+    return c.json(searchData);
   })
   .get("/movie", async (c) => {
-    const URL = `${API_URL}/3/trending/movie/day?language=es-MX`;
-
-    const response = await fetch(URL, OPTIONS);
-
-    const data = await response.json();
-
-    const tv: Movie[] = data.results;
-
-    return c.json(tv);
+    return c.json([]);
   })
   .get("/tv", async (c) => {
-    const URL = `${API_URL}/3/trending/tv/day?language=es-MX`;
-
-    const response = await fetch(URL, OPTIONS);
-
-    const data = await response.json();
-
-    const tv: Tv[] = data.results;
-
-    return c.json(tv);
+    return c.json([]);
   });
