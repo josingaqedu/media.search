@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useSearchMulti } from "@/features/search/api/use-search-multi";
 
 import { SearchNotFound } from "@/features/search/components/search-not-found";
+import { SearchNotData } from "@/features/search/components/search-not-data";
 import { MediaCard } from "@/features/search/components/media-card";
 
 import { ListMediaCardSkeleton } from "@/components/list-media-card-skeleton";
@@ -24,9 +25,11 @@ export const MediaResult = () => {
 
   if (isPending) return <ListMediaCardSkeleton />;
 
+  if (!data || data.length == 0) return <SearchNotData />;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-      {data?.map((item) => (
+      {data.map((item) => (
         <MediaCard key={item.id} data={item} />
       ))}
     </div>
