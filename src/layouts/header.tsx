@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 
 import { ThemeDropdown } from "@/components/theme-dropdown";
@@ -72,7 +72,9 @@ export const Header = () => {
 
       <NavbarContent justify="end">
         <NavbarItem>
-          <SearchModal />
+          <Suspense>
+            <SearchModal />
+          </Suspense>
         </NavbarItem>
         <NavbarItem>
           <ThemeDropdown />
