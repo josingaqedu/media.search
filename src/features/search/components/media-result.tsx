@@ -15,7 +15,7 @@ export const MediaResult = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  const { mutate, data, isPending } = useSearchMulti();
+  const { mutate, data, isIdle, isPending, isError } = useSearchMulti();
 
   useEffect(() => {
     mutate({ json: { query } });
@@ -23,7 +23,9 @@ export const MediaResult = () => {
 
   if (!query) return <SearchNotFound />;
 
-  if (isPending) return <ListMediaCardSkeleton />;
+  if (isIdle || isPending) return <ListMediaCardSkeleton />;
+
+  if (isError) return <SearchNotData />;
 
   if (!data || data.length == 0) return <SearchNotData />;
 

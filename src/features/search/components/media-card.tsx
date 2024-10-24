@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/navigation";
+
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import { StarIcon } from "lucide-react";
 import { ResultSearch } from "@/types";
@@ -8,8 +10,15 @@ interface MediaCardProps {
 }
 
 export const MediaCard = ({ data }: MediaCardProps) => {
+  const router = useRouter();
+
   return (
-    <Card shadow="sm" isPressable={true} onClick={() => console.log(data)}>
+    <Card
+      shadow="sm"
+      isPressable={true}
+      onPress={() => router.push(`/detail/${data.media_type}/${data.id}`)}
+      onClick={() => router.push(`/detail/${data.media_type}/${data.id}`)}
+    >
       <CardBody className="overflow-visible p-0">
         <img
           width="100%"

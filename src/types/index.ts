@@ -32,6 +32,23 @@ export interface Tv {
   vote_count: number;
 }
 
+export interface ResultVideo {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+}
+
+export type Videos = {
+  results: ResultVideo[];
+};
+
 export interface ResultSearch {
   backdrop_path: null | string;
   id: number;
@@ -52,4 +69,5 @@ export interface ResultSearch {
   original_title?: string;
   release_date?: string;
   video?: boolean;
+  videos?: Videos;
 }
