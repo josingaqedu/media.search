@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 import { useDetailMovie } from "@/features/detail/api/use-detail-movie";
 
+import { DetailMediaSkeleton } from "@/components/detail-media-skeleton";
 import { Card, CardBody, CardHeader, Chip, Image } from "@nextui-org/react";
 
 import "@github/relative-time-element";
@@ -16,13 +17,13 @@ interface MediaDetailProps {
 }
 
 export const MovieDetail = ({ id }: MediaDetailProps) => {
-  const { mutate, data: movie, isPending } = useDetailMovie();
+  const { mutate, data: movie, isIdle, isPending } = useDetailMovie();
 
   useEffect(() => {
     mutate({ json: { id } });
   }, [mutate, id]);
 
-  if (isPending) return <div>Loading...</div>;
+  if (isIdle || isPending) return <DetailMediaSkeleton />;
 
   return (
     <section
@@ -33,7 +34,7 @@ export const MovieDetail = ({ id }: MediaDetailProps) => {
     >
       <div className="bg-black bg-opacity-50 dark:bg-opacity-70">
         <div className="max-w-screen-xl mx-auto px-6 py-2">
-          <Card className="w-full p-4 bg-white/50 dark:bg-black/50 text-black dark:text-white">
+          <Card className="w-full bg-white/50 dark:bg-black/50 text-black dark:text-white p-4">
             <CardHeader className="flex justify-center">
               <h1 className="text-2xl font-bold uppercase">
                 {movie?.title} ({movie?.release_date?.split("-")[0]})

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 import { useDetailTv } from "@/features/detail/api/use-detail-tv";
 
+import { DetailMediaSkeleton } from "@/components/detail-media-skeleton";
 import { Card, CardBody, CardHeader, Chip, Image } from "@nextui-org/react";
 
 import "@github/relative-time-element";
@@ -16,13 +17,13 @@ interface MediaDetailProps {
 }
 
 export const TvDetail = ({ id }: MediaDetailProps) => {
-  const { mutate, data: tv, isPending } = useDetailTv();
+  const { mutate, data: tv, isIdle, isPending } = useDetailTv();
 
   useEffect(() => {
     mutate({ json: { id } });
   }, [mutate, id]);
 
-  if (isPending) return <div>Loading...</div>;
+  if (isIdle || isPending) return <DetailMediaSkeleton />;
 
   return (
     <section
