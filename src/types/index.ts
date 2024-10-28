@@ -71,3 +71,19 @@ export interface ResultSearch {
   video?: boolean;
   videos?: Videos;
 }
+
+interface Provider {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
+export interface Country {
+  name: string;
+  link?: string;
+  flatrate?: Provider[];
+  ads?: Provider[];
+  rent?: Provider[];
+  buy?: Provider[];
+}

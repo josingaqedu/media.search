@@ -31,7 +31,7 @@ export const DetailMediaSkeleton = () => {
             <div className="space-y-2">
               <Skeleton className="w-40 h-8 rounded-large" />
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, index) => (
+                {Array.from({ length: 4 }).map((_, index) => (
                   <div className="space-y-2" key={index}>
                     <Skeleton className="w-full h-40 rounded-large" />
                     <Skeleton className="w-full h-4 rounded-large" />

@@ -1,29 +1,87 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useDetailMovie } from "@/features/detail/api/use-detail-movie";
+import { useMovieProviders } from "@/features/detail/api/use-movie-providers";
 
 import { DetailMediaSkeleton } from "@/components/detail-media-skeleton";
-import { Card, CardBody, CardHeader, Chip, Image } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Image,
+  Input,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
 
 import "@github/relative-time-element";
 
-import { PlayIcon, StarIcon } from "lucide-react";
+import { ExternalLinkIcon, PlayIcon, SearchIcon, StarIcon } from "lucide-react";
 
 interface MediaDetailProps {
   id: string;
 }
 
 export const MovieDetail = ({ id }: MediaDetailProps) => {
-  const { mutate, data: movie, isIdle, isPending } = useDetailMovie();
+  const {
+    mutate: mutateDetail,
+    data: movie,
+    isIdle: isIdleDetail,
+    isPending: isPendingDetail,
+  } = useDetailMovie();
+
+  const {
+    mutate: mutateProviders,
+    data: providers,
+    isIdle: isIdleProviders,
+    isPending: isPendingProviders,
+  } = useMovieProviders();
 
   useEffect(() => {
-    mutate({ json: { id } });
-  }, [mutate, id]);
+    mutateDetail({ json: { id } });
+    mutateProviders({ json: { id } });
+  }, [mutateDetail, mutateProviders, id]);
 
-  if (isIdle || isPending) return <DetailMediaSkeleton />;
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const rowsPerPage = 4;
+
+  const pages = Math.ceil((providers?.length ?? 0) / rowsPerPage);
+
+  const items = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    if (search) {
+      return providers
+        ?.filter((provider) =>
+          provider.flatrate?.some((f) =>
+            f.provider_name.toLowerCase().includes(search.toLowerCase())
+          )
+        )
+        .slice(start, end);
+    } else {
+      return providers?.slice(start, end);
+    }
+  }, [page, search, providers]);
+
+  if (
+    isIdleDetail ||
+    isPendingDetail ||
+    isIdleProviders ||
+    isPendingProviders
+  ) {
+    return <DetailMediaSkeleton />;
+  }
 
   return (
     <section
@@ -107,6 +165,107 @@ export const MovieDetail = ({ id }: MediaDetailProps) => {
                   </div>
                 </div>
               )}
+
+              <div className="space-y-2">
+                <h1 className="text-xl font-semibold uppercase">
+                  Proveedores de video
+                </h1>
+                <div>
+                  <Table
+                    isStriped={true}
+                    topContent={
+                      <div>
+                        <Input
+                          startContent={<SearchIcon />}
+                          placeholder="Busca por plataformas de streaming"
+                          value={search}
+                          onValueChange={setSearch}
+                        />
+                      </div>
+                    }
+                    bottomContent={
+                      <div className="flex w-full justify-end">
+                        <Pagination
+                          isCompact={true}
+                          showControls={true}
+                          color="primary"
+                          variant="flat"
+                          page={page}
+                          total={pages}
+                          onChange={(page) => setPage(page)}
+                        />
+                      </div>
+                    }
+                  >
+                    <TableHeader>
+                      <TableColumn key="name">PAÍS</TableColumn>
+                      <TableColumn key="link">TMDB</TableColumn>
+                      <TableColumn key="streaming">STREAMING</TableColumn>
+                      <TableColumn key="free">GRATIS</TableColumn>
+                      <TableColumn key="rent">ALQUILAR</TableColumn>
+                      <TableColumn key="buy">COMPRAR</TableColumn>
+                    </TableHeader>
+                    <TableBody
+                      items={items ?? []}
+                      emptyContent={"No hay datos disponibles"}
+                    >
+                      {(items ?? []).map((row) => {
+                        return (
+                          <TableRow key={row.name}>
+                            <TableCell>{row.name}</TableCell>
+                            <TableCell>
+                              <a
+                                href={row.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-lg text-primary hover:underline flex items-center gap-2"
+                              >
+                                <span>Ir</span> <ExternalLinkIcon />
+                              </a>
+                            </TableCell>
+                            <TableCell>
+                              {row.flatrate?.map((f) => {
+                                return (
+                                  <Chip key={f.provider_name} className="m-2">
+                                    {f.provider_name}
+                                  </Chip>
+                                );
+                              })}
+                            </TableCell>
+                            <TableCell>
+                              {row.ads?.map((a) => {
+                                return (
+                                  <Chip key={a.provider_name} className="m-2">
+                                    {a.provider_name}
+                                  </Chip>
+                                );
+                              })}
+                            </TableCell>
+                            <TableCell>
+                              {row.rent?.map((r) => {
+                                return (
+                                  <Chip key={r.provider_name} className="m-2">
+                                    {r.provider_name}
+                                  </Chip>
+                                );
+                              })}
+                            </TableCell>
+                            <TableCell>
+                              {row.buy?.map((b) => {
+                                return (
+                                  <Chip key={b.provider_name} className="m-2">
+                                    {b.provider_name}
+                                  </Chip>
+                                );
+                              })}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
             </CardBody>
           </Card>
         </div>
